@@ -1,4 +1,3 @@
-// lib/screens/movie_recommendations_screen.dart
 import 'package:flutter/material.dart';
 import 'package:recommendation_app/model/movie_model.dart';
 import 'package:recommendation_app/patterns/movie_decorator.dart';
@@ -28,13 +27,19 @@ class _MovieRecommendationsScreenState extends State<MovieRecommendationsScreen>
   @override
   void initState() {
     super.initState();
+    print('MovieRecommendationsScreen initialized with mood: ${widget.mood}, genre: ${widget.genre}');
     _moviesFuture = _loadMovies();
   }
 
   Future<List<Movie>> _loadMovies() async {
-    // Movie data for all genres with real image URLs
+    // Normalize genre to match mock data (e.g., "drama" -> "Drama")
+    final normalizedGenre = widget.genre.isNotEmpty
+        ? widget.genre[0].toUpperCase() + widget.genre.substring(1).toLowerCase()
+        : widget.genre;
+
+    // Movie data with 2 movies per genre
     final mockMovies = [
-      // Drama
+      // Drama (2 movies)
       Movie(
         id: '1',
         title: 'The Shawshank Redemption',
@@ -55,17 +60,7 @@ class _MovieRecommendationsScreenState extends State<MovieRecommendationsScreen>
         rating: 9.2,
         genre: 'Drama',
       ),
-      Movie(
-        id: '3',
-        title: 'Pulp Fiction',
-        imageUrl: 'https://m.media-amazon.com/images/M/MV5BNGNhMDIzZTUtNTBlZi00MTRlLWFjM2ItYzViMjE3YzI5MjljXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg',
-        plot: 'The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.',
-        actors: ['John Travolta', 'Uma Thurman', 'Samuel L. Jackson'],
-        releaseDate: '1994-10-14',
-        rating: 8.9,
-        genre: 'Drama',
-      ),
-      // Action
+      // Action (2 movies)
       Movie(
         id: '4',
         title: 'The Dark Knight',
@@ -86,17 +81,7 @@ class _MovieRecommendationsScreenState extends State<MovieRecommendationsScreen>
         rating: 8.1,
         genre: 'Action',
       ),
-      Movie(
-        id: '6',
-        title: 'John Wick',
-        imageUrl: 'https://m.media-amazon.com/images/M/MV5BMTU2NjA1ODgzMF5BMl5BanBnXkFtZTgwMTM2MTI4MjE@._V1_.jpg',
-        plot: 'An ex-hitman comes out of retirement to track down the gangsters who took everything from him.',
-        actors: ['Keanu Reeves', 'Michael Nyqvist', 'Alfie Allen'],
-        releaseDate: '2014-10-24',
-        rating: 7.4,
-        genre: 'Action',
-      ),
-      // Comedy
+      // Comedy (2 movies)
       Movie(
         id: '7',
         title: 'The Hangover',
@@ -117,17 +102,7 @@ class _MovieRecommendationsScreenState extends State<MovieRecommendationsScreen>
         rating: 7.6,
         genre: 'Comedy',
       ),
-      Movie(
-        id: '9',
-        title: 'Bridesmaids',
-        imageUrl: 'https://m.media-amazon.com/images/M/MV5BMjAyOTMyMzUxNl5BMl5BanBnXkFtZTcwODI4MzE0NA@@._V1_.jpg',
-        plot: 'Competition between the maid of honor and a bridesmaid, over who is the bride\'s best friend, threatens to upend the life of an out-of-work pastry chef.',
-        actors: ['Kristen Wiig', 'Maya Rudolph', 'Rose Byrne'],
-        releaseDate: '2011-05-13',
-        rating: 6.8,
-        genre: 'Comedy',
-      ),
-      // Horror
+      // Horror (2 movies)
       Movie(
         id: '10',
         title: 'The Conjuring',
@@ -136,16 +111,6 @@ class _MovieRecommendationsScreenState extends State<MovieRecommendationsScreen>
         actors: ['Patrick Wilson', 'Vera Farmiga', 'Ron Livingston'],
         releaseDate: '2013-07-19',
         rating: 7.5,
-        genre: 'Horror',
-      ),
-      Movie(
-        id: '11',
-        title: 'Hereditary',
-        imageUrl: 'https://m.media-amazon.com/images/M/MV5BOTU5MDg3OGItZWQ1Ny00ZGVmLTg2YTUtMzBkYzQ1YWIwZjlhXkEyXkFqcGdeQXVyNTAzMTY4MDA@._V1_.jpg',
-        plot: 'A grieving family is haunted by tragic and disturbing occurrences.',
-        actors: ['Toni Collette', 'Milly Shapiro', 'Gabriel Byrne'],
-        releaseDate: '2018-06-08',
-        rating: 7.3,
         genre: 'Horror',
       ),
       Movie(
@@ -158,7 +123,7 @@ class _MovieRecommendationsScreenState extends State<MovieRecommendationsScreen>
         rating: 7.7,
         genre: 'Horror',
       ),
-      // Romance
+      // Romance (2 movies)
       Movie(
         id: '13',
         title: 'The Notebook',
@@ -179,17 +144,7 @@ class _MovieRecommendationsScreenState extends State<MovieRecommendationsScreen>
         rating: 8.0,
         genre: 'Romance',
       ),
-      Movie(
-        id: '15',
-        title: 'Pride & Prejudice',
-        imageUrl: 'https://m.media-amazon.com/images/M/MV5BMTA1NDQ3NTcyOTNeQTJeQWpwZ15BbWU3MDA0MzA4MzE@._V1_.jpg',
-        plot: 'Sparks fly when spirited Elizabeth Bennet meets single, rich, and proud Mr. Darcy.',
-        actors: ['Keira Knightley', 'Matthew Macfadyen', 'Rosamund Pike'],
-        releaseDate: '2005-11-11',
-        rating: 7.8,
-        genre: 'Romance',
-      ),
-      // Sci-Fi
+      // Sci-Fi (2 movies)
       Movie(
         id: '16',
         title: 'Inception',
@@ -198,16 +153,6 @@ class _MovieRecommendationsScreenState extends State<MovieRecommendationsScreen>
         actors: ['Leonardo DiCaprio', 'Joseph Gordon-Levitt', 'Ellen Page'],
         releaseDate: '2010-07-16',
         rating: 8.8,
-        genre: 'Sci-Fi',
-      ),
-      Movie(
-        id: '17',
-        title: 'The Matrix',
-        imageUrl: 'https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg',
-        plot: 'A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.',
-        actors: ['Keanu Reeves', 'Laurence Fishburne', 'Carrie-Anne Moss'],
-        releaseDate: '1999-03-31',
-        rating: 8.7,
         genre: 'Sci-Fi',
       ),
       Movie(
@@ -220,7 +165,7 @@ class _MovieRecommendationsScreenState extends State<MovieRecommendationsScreen>
         rating: 8.6,
         genre: 'Sci-Fi',
       ),
-      // Animation
+      // Animation (2 movies)
       Movie(
         id: '19',
         title: 'Spirited Away',
@@ -241,17 +186,7 @@ class _MovieRecommendationsScreenState extends State<MovieRecommendationsScreen>
         rating: 8.3,
         genre: 'Animation',
       ),
-      Movie(
-        id: '21',
-        title: 'Spider-Man: Into the Spider-Verse',
-        imageUrl: 'https://m.media-amazon.com/images/M/MV5BMjMwNDkxMTgzOF5BMl5BanBnXkFtZTgwNTkwNTQ3NjM@._V1_.jpg',
-        plot: 'Teen Miles Morales becomes the Spider-Man of his universe, and must join with five spider-powered individuals from other dimensions to stop a threat.',
-        actors: ['Shameik Moore', 'Jake Johnson', 'Hailee Steinfeld'],
-        releaseDate: '2018-12-14',
-        rating: 8.4,
-        genre: 'Animation',
-      ),
-      // Documentary
+      // Documentary (2 movies)
       Movie(
         id: '22',
         title: 'Free Solo',
@@ -260,16 +195,6 @@ class _MovieRecommendationsScreenState extends State<MovieRecommendationsScreen>
         actors: ['Alex Honnold', 'Tommy Caldwell', 'Jimmy Chin'],
         releaseDate: '2018-09-28',
         rating: 8.1,
-        genre: 'Documentary',
-      ),
-      Movie(
-        id: '23',
-        title: 'The Social Dilemma',
-        imageUrl: 'https://image.tmdb.org/t/p/original/iVdYRFlPgn1zcR2UIpHZ5FES8FS.jpg',
-        plot: 'Explores the dangerous human impact of social networking, with tech experts sounding the alarm on their own creations.',
-        actors: ['Skyler Gisondo', 'Kara Hayward', 'Vincent Kartheiser'],
-        releaseDate: '2020-01-26',
-        rating: 7.6,
         genre: 'Documentary',
       ),
       Movie(
@@ -284,26 +209,43 @@ class _MovieRecommendationsScreenState extends State<MovieRecommendationsScreen>
       ),
     ];
 
-    // Insert mock data into database (only if empty)
-    final existingMovies = await _dbHelper.getMoviesByGenre(widget.genre);
+    // Ensure database is initialized
+    await _dbHelper.database;
+
+    // Debug: Check all movies in database
+    final db = await _dbHelper.database;
+    final allMovies = await db.query('movies');
+    print('All movies in database: ${allMovies.length}');
+
+    // Get existing movies for the genre
+    final existingMovies = await _dbHelper.getMoviesByGenre(normalizedGenre);
+    print('Existing movies for genre $normalizedGenre: ${existingMovies.length}');
+
+    // Insert mock data only if no movies exist for the genre
     if (existingMovies.isEmpty) {
+      print('Inserting mock movies');
       await _dbHelper.insertMovies(mockMovies);
     }
 
     // Get movies from database
-    final movies = await _dbHelper.getMoviesByGenre(widget.genre);
+    final movies = await _dbHelper.getMoviesByGenre(normalizedGenre);
+    print('Loaded movies for genre $normalizedGenre: ${movies.length}');
+
+    // Temporary bypass of decorators to ensure movies display
+    return movies;
 
     // Apply decorator pattern to get recommendations
-    final baseRecommendation = BaseMovieRecommendation(movies);
-    final moodBasedRecommendation = MoodBasedRecommendationDecorator(
-      baseRecommendation,
-      widget.mood,
-    );
-    final popularRecommendation = PopularRecommendationDecorator(
-      moodBasedRecommendation,
-    );
-
-    return popularRecommendation.getMovies();
+    // final baseRecommendation = BaseMovieRecommendation(movies);
+    // final moodBasedRecommendation = MoodBasedRecommendationDecorator(
+    //   baseRecommendation,
+    //   widget.mood,
+    // );
+    // final popularRecommendation = PopularRecommendationDecorator(
+    //   moodBasedRecommendation,
+    // );
+    // final recommendedMovies = popularRecommendation.getMovies();
+    // print('Recommended movies after decorators: ${recommendedMovies.length}');
+    // return recommendedMovies;
   }
 
   @override
@@ -312,7 +254,7 @@ class _MovieRecommendationsScreenState extends State<MovieRecommendationsScreen>
       backgroundColor: Colors.black,
       appBar: AppBar(
         title: Text(
-          '${widget.genre} Movies',
+          '${widget.genre} Movies for ${widget.mood} mood',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.black,
@@ -321,10 +263,7 @@ class _MovieRecommendationsScreenState extends State<MovieRecommendationsScreen>
           IconButton(
             icon: Icon(Icons.bookmark, color: Colors.white),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => WatchlistScreen()),
-              );
+              Navigator.pushNamed(context, '/watchlist');
             },
           ),
         ],
@@ -337,12 +276,18 @@ class _MovieRecommendationsScreenState extends State<MovieRecommendationsScreen>
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}', style: TextStyle(color: Colors.white)));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No movies found', style: TextStyle(color: Colors.white)));
+            return Center(child: Text('No movies found for ${widget.genre}', style: TextStyle(color: Colors.white)));
           }
 
           final movies = snapshot.data!;
-          return ListView.builder(
-            padding: EdgeInsets.all(8),
+          return GridView.builder(
+            padding: EdgeInsets.all(16),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              childAspectRatio: 0.65,
+            ),
             itemCount: movies.length,
             itemBuilder: (context, index) {
               final movie = movies[index];
@@ -382,14 +327,14 @@ class _NetflixMovieCardState extends State<NetflixMovieCard> {
             alignment: Alignment.bottomLeft,
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(12),
                 child: Image.network(
                   widget.movie.imageUrl,
                   width: double.infinity,
-                  height: 200,
+                  height: 250,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) => Container(
-                    height: 200,
+                    height: 250,
                     color: Colors.grey[800],
                     child: Center(child: Icon(Icons.error, color: Colors.white)),
                   ),
@@ -397,15 +342,15 @@ class _NetflixMovieCardState extends State<NetflixMovieCard> {
               ),
               // Gradient overlay
               Container(
-                height: 200,
+                height: 250,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(12),
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
                       Colors.transparent,
-                      Colors.black.withOpacity(0.7),
+                      Colors.black.withOpacity(0.8),
                     ],
                   ),
                 ),
@@ -420,24 +365,24 @@ class _NetflixMovieCardState extends State<NetflixMovieCard> {
                     Text(
                       widget.movie.title,
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 22,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),
-                    SizedBox(height: 4),
+                    SizedBox(height: 8),
                     Row(
                       children: [
-                        Icon(Icons.star, color: Colors.yellow, size: 16),
+                        Icon(Icons.star, color: Colors.yellow, size: 18),
                         SizedBox(width: 4),
                         Text(
                           '${widget.movie.rating}',
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.white, fontSize: 16),
                         ),
                         SizedBox(width: 16),
                         Text(
                           widget.movie.releaseDate.substring(0, 4),
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.white, fontSize: 16),
                         ),
                       ],
                     ),
@@ -452,7 +397,7 @@ class _NetflixMovieCardState extends State<NetflixMovieCard> {
                   icon: Icon(
                     widget.movie.isInWatchlist ? Icons.bookmark : Icons.bookmark_border,
                     color: widget.movie.isInWatchlist ? Colors.red : Colors.white,
-                    size: 28,
+                    size: 32,
                   ),
                   onPressed: () => _toggleWatchlist(),
                 ),
@@ -462,12 +407,12 @@ class _NetflixMovieCardState extends State<NetflixMovieCard> {
                 Positioned.fill(
                   child: Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Colors.black.withOpacity(0.3),
-                      border: Border.all(color: Colors.red, width: 2),
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.black.withOpacity(0.4),
+                      border: Border.all(color: Colors.red, width: 3),
                     ),
                     child: Center(
-                      child: Icon(Icons.play_arrow, color: Colors.white, size: 50),
+                      child: Icon(Icons.play_arrow, color: Colors.white, size: 60),
                     ),
                   ),
                 ),
@@ -480,7 +425,7 @@ class _NetflixMovieCardState extends State<NetflixMovieCard> {
 
   Future<void> _toggleWatchlist() async {
     const userId = 1; // In a real app, use actual user ID
-    
+
     setState(() {
       widget.movie.isInWatchlist = !widget.movie.isInWatchlist;
     });

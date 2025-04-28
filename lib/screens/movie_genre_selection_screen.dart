@@ -1,6 +1,4 @@
-// lib/screens/movie_genre_selection_screen.dart
 import 'package:flutter/material.dart';
-import 'package:recommendation_app/screens/movie_recommendations_screen.dart';
 import 'package:recommendation_app/screens/watchlist_screen.dart';
 
 class MovieGenreSelectionScreen extends StatelessWidget {
@@ -48,16 +46,12 @@ class MovieGenreSelectionScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Select a Genre', style: TextStyle(color: Colors.white)),
         backgroundColor: Color(0xFF222222),
-
         elevation: 0,
         actions: [
           IconButton(
             icon: Icon(Icons.bookmark, color: Colors.white),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => WatchlistScreen()),
-              );
+              Navigator.pushNamed(context, '/watchlist');
             },
           ),
         ],
@@ -111,14 +105,13 @@ class MovieGenreSelectionScreen extends StatelessWidget {
                     description: genres[index]['desc']!,
                     color: _getGenreColor(genres[index]['name']!),
                     onTap: () {
-                      Navigator.push(
+                      Navigator.pushNamed(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => MovieRecommendationsScreen(
-                            mood: mood,
-                            genre: genres[index]['name']!,
-                          ),
-                        ),
+                        '/movieRecommendations',
+                        arguments: {
+                          'mood': mood,
+                          'genre': genres[index]['name']!,
+                        },
                       );
                     },
                   );

@@ -1,26 +1,79 @@
-// lib/screens/mood_selection_screen.dart
 import 'package:flutter/material.dart';
 import 'package:recommendation_app/screens/media_selection_screen.dart';
+import 'package:recommendation_app/screens/favorites_screen.dart';
+import 'package:recommendation_app/screens/music_recommendations.dart';
+import 'package:recommendation_app/screens/playlist_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class MoodSelectionScreen extends StatelessWidget {
+class MoodSelectionScreen extends StatefulWidget {
   final String userEmail;
 
-  MoodSelectionScreen({super.key, required this.userEmail});
+  const MoodSelectionScreen({super.key, required this.userEmail});
 
-  final List<Mood> moods = [
-    Mood('Happy', '😊', 'happy'),
-    Mood('Sad', '😢', 'sad'),
-    Mood('Energetic', '🤩', 'energetic'),
-    Mood('Calm', '😌', 'calm'),
-    Mood('Romantic', '🥰', 'romantic'),
-    Mood('Angry', '😠', 'angry'),
-  ];
+  @override
+  _MoodSelectionScreenState createState() => _MoodSelectionScreenState();
+}
+
+class _MoodSelectionScreenState extends State<MoodSelectionScreen> {
+  String? selectedMood;
+  String? selectedGenre;
+  List<String>? genres;
+  String? userName;
+  int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserName();
+  }
+
+  Future<void> _loadUserName() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userName = prefs.getString('username') ?? 'Friend';
+    });
+  }
+
+  List<String> _getGenresForMood(String mood) {
+    final moodGenres = {
+      'happy': ['pop', 'disco', 'funk'],
+      'sad': ['blues', 'jazz', 'ballad'],
+      'energetic': ['rock', 'metal', 'edm'],
+      'calm': ['classical', 'ambient', 'lo-fi'],
+      'romantic': ['pop', 'r&b', 'soul'],
+      'angry': ['metal', 'punk', 'hard rock'],
+    };
+    return moodGenres[mood] ?? ['pop'];
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) async {
+          setState(() => _currentIndex = index);
+          if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const FavoritesScreen()),
+            ).then((_) => setState(() => _currentIndex = 0));
+          } else if (index == 2) {
+            final userId = await _getUserId(widget.userEmail);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PlaylistScreen(userId: userId)),
+            ).then((_) => setState(() => _currentIndex = 0));
+          }
+        },
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Favorites'),
+          BottomNavigationBarItem(icon: Icon(Icons.playlist_play), label: 'Playlists'),
+        ],
+      ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -39,51 +92,98 @@ class MoodSelectionScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 40),
                 child: Text(
-                  'How are you feeling today?\nChoose your mood!\n____________',
+                  userName == null
+                      ? 'How are you feeling today?\nChoose your mood!\n____________'
+                      : 'How are you feeling today?\nChoose your mood!\n____________',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 28, // Bigger
-                    fontWeight: FontWeight.w800, // Bolder
-                    color: const Color.fromARGB(221, 22, 22, 22), // Darker
+                  style: const TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w800,
+                    color: Color.fromARGB(221, 22, 22, 22),
                     fontFamily: 'Roboto',
-                    height: 1.3, // Better line spacing
+                    height: 1.3,
                   ),
                 ),
               ),
-              
               Expanded(
                 child: Center(
-                  child: GridView.count(
-                    padding: EdgeInsets.all(30),
-                    crossAxisCount: 2, // 2 per row
-                    mainAxisSpacing: 25,
-                    crossAxisSpacing: 25,
-                    childAspectRatio: 1,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    children: moods.map((mood) => 
-                      MoodCard(
-                        mood: mood,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MediaSelectionScreen(mood: mood.genre),
-                            ),
-                          );
-                        },
-                      ),
-                    ).toList(),
-                  ),
+                  child: selectedMood == null
+                      ? _buildMoodGrid()
+                      : _buildGenreSelection(),
                 ),
               ),
-              
-              SizedBox(height: 30), // Bottom spacing
+              const SizedBox(height: 30),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildMoodGrid() {
+    final List<Mood> moods = [
+      Mood('Happy', '😊', 'happy'),
+      Mood('Sad', '😢', 'sad'),
+      Mood('Energetic', '🤩', 'energetic'),
+      Mood('Calm', '😌', 'calm'),
+      Mood('Romantic', '🥰', 'romantic'),
+      Mood('Angry', '😠', 'angry'),
+    ];
+
+    return GridView.count(
+      padding: const EdgeInsets.all(30),
+      crossAxisCount: 2,
+      mainAxisSpacing: 25,
+      crossAxisSpacing: 25,
+      childAspectRatio: 1,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      children: moods
+          .map((mood) => MoodCard(
+                mood: mood,
+                onTap: () {
+                  setState(() {
+                    selectedMood = mood.genre;
+                    genres = _getGenresForMood(mood.genre);
+                  });
+                },
+              ))
+          .toList(),
+    );
+  }
+
+  Widget _buildGenreSelection() {
+    return GridView.count(
+      padding: const EdgeInsets.all(30),
+      crossAxisCount: 2,
+      mainAxisSpacing: 25,
+      crossAxisSpacing: 25,
+      childAspectRatio: 1,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      children: genres
+        ?.map((genre) => GenreCard(
+              genre: genre,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MusicRecommendationsScreen(
+                      mood: selectedMood!,
+                      selectedGenre: genre,
+                    ),
+                  ),
+                );
+              },
+            ))
+        ?.toList() ?? [],
+  );
+}
+
+  Future<int> _getUserId(String email) async {
+    // TODO: Implement user ID fetching (e.g., from database or SharedPreferences)
+    // Placeholder: Hash email or query database
+    return 1;
   }
 }
 
@@ -104,12 +204,12 @@ class MoodCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorMap = {
-      'happy': Color(0xFFFFF9C4), // Pastel yellow
-      'sad': Color(0xFFB3E5FC), // Pastel blue
-      'energetic': Color(0xFFFFCCBC), // Pastel orange
-      'calm': Color(0xFFC8E6C9), // Pastel green
-      'romantic': Color(0xFFF8BBD0), // Pastel pink
-      'angry': Color(0xFFFFCDD2), // Light red
+      'happy': const Color(0xFFFFF9C4), // Pastel yellow
+      'sad': const Color(0xFFB3E5FC), // Pastel blue
+      'energetic': const Color(0xFFFFCCBC), // Pastel orange
+      'calm': const Color(0xFFC8E6C9), // Pastel green
+      'romantic': const Color(0xFFF8BBD0), // Pastel pink
+      'angry': const Color(0xFFFFCDD2), // Light red
     };
 
     return GestureDetector(
@@ -125,7 +225,7 @@ class MoodCard extends StatelessWidget {
                 color: Colors.black.withOpacity(0.1),
                 blurRadius: 10,
                 spreadRadius: 2,
-                offset: Offset(0, 4),
+                offset: const Offset(0, 4),
               ),
             ],
           ),
@@ -134,27 +234,74 @@ class MoodCard extends StatelessWidget {
             onTap: onTap,
             splashColor: Colors.white.withOpacity(0.3),
             child: Container(
-              constraints: BoxConstraints(
-                minWidth: 150, // Minimum size
-                minHeight: 150,
-              ),
+              constraints: const BoxConstraints(minWidth: 150, minHeight: 150),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     mood.emoji,
-                    style: TextStyle(fontSize: 48), // Bigger emoji
+                    style: const TextStyle(fontSize: 48),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text(
                     mood.name,
-                    style: TextStyle(
-                      fontSize: 20, // Bigger text
-                      fontWeight: FontWeight.w600, // Bolder
-                      color: Colors.black87, // Darker
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
                     ),
                   ),
                 ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class GenreCard extends StatelessWidget {
+  final String genre;
+  final VoidCallback onTap;
+
+  const GenreCard({super.key, required this.genre, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Material(
+        color: Colors.transparent,
+        child: Ink(
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.9),
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                spreadRadius: 2,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(100),
+            onTap: onTap,
+            splashColor: Colors.white.withOpacity(0.3),
+            child: Container(
+              constraints: const BoxConstraints(minWidth: 150, minHeight: 150),
+              child: Center(
+                child: Text(
+                  genre.toUpperCase(),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),

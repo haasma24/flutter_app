@@ -1,39 +1,50 @@
-// lib/screens/media_selection_screen.dart
 import 'package:flutter/material.dart';
+import 'package:recommendation_app/screens/mood_selection_screen.dart';
 import 'package:recommendation_app/screens/movie_genre_selection_screen.dart';
+import 'package:recommendation_app/screens/music_recommendations.dart';
 
 class MediaSelectionScreen extends StatelessWidget {
   final String mood;
+  final String genre;
 
-  const MediaSelectionScreen({Key? key, required this.mood}) : super(key: key);
+  const MediaSelectionScreen({
+    super.key,
+    required this.mood,
+    this.genre = 'pop', // Default genre for backward compatibility
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('What would you like to explore?'),
+        title: const Text('What would you like to explore?'),
         backgroundColor: const Color.fromARGB(255, 203, 202, 202),
       ),
       body: Container(
         color: const Color.fromARGB(255, 235, 227, 227),
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             // Music Section (Top Half)
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(bottom: 10),
+                padding: const EdgeInsets.only(bottom: 10),
                 child: GestureDetector(
                   onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Music recommendations coming soon!')),
-                    );
-                  },
+                      Navigator.push(
+                       context,
+                       MaterialPageRoute(
+                       builder: (context) => MoodSelectionScreen(
+                       userEmail: '', // Pass empty or get from context
+                        ),
+                       ),
+                     );
+                    },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 28, 175, 82), // green
+                      color: const Color.fromARGB(255, 28, 175, 82), // green
                       borderRadius: BorderRadius.circular(25),
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                           color: Colors.black12,
                           blurRadius: 10,
@@ -45,7 +56,7 @@ class MediaSelectionScreen extends StatelessWidget {
                     child: Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
+                        children: const [
                           Icon(Icons.music_note, size: 80, color: Colors.white),
                           SizedBox(height: 20),
                           Text(
@@ -76,7 +87,7 @@ class MediaSelectionScreen extends StatelessWidget {
             // Movies Section (Bottom Half)
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(top: 10),
+                padding: const EdgeInsets.only(top: 10),
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -88,9 +99,9 @@ class MediaSelectionScreen extends StatelessWidget {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Color(0xFFC92E2E), // Pastel red
+                      color: const Color(0xFFC92E2E), // Pastel red
                       borderRadius: BorderRadius.circular(25),
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                           color: Colors.black12,
                           blurRadius: 10,
@@ -102,7 +113,7 @@ class MediaSelectionScreen extends StatelessWidget {
                     child: Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
+                        children: const [
                           Icon(Icons.movie, size: 80, color: Colors.white),
                           SizedBox(height: 20),
                           Text(

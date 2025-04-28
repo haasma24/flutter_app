@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:recommendation_app/model/registration_context.dart';
 import 'gender_screen.dart';
@@ -6,7 +5,7 @@ import 'gender_screen.dart';
 class LastNameScreen extends StatefulWidget {
   final RegistrationContext contextData;
 
-  const LastNameScreen({required this.contextData});
+  const LastNameScreen({Key? key, required this.contextData}) : super(key: key);
 
   @override
   _LastNameScreenState createState() => _LastNameScreenState();

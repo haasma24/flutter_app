@@ -4,6 +4,8 @@ import 'first_name_screen.dart';
 import 'login_screen.dart';
 
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,8 +103,6 @@ class HomeScreen extends StatelessWidget {
                   _buildLoginButton(context),
 
                   SizedBox(height: 40),
-
-
                 ],
               ),
             ),
@@ -115,15 +115,15 @@ class HomeScreen extends StatelessWidget {
   Widget _buildLogoWidget() {
     try {
       return Container(
-        height: 350, // Increased size
-        width: 350,  // Increased size
+        height: 350,
+        width: 350,
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.1),
-              blurRadius: 15,  // Enhanced shadow
+              blurRadius: 15,
               spreadRadius: 5,
             ),
           ],
@@ -140,8 +140,8 @@ class HomeScreen extends StatelessWidget {
       );
     } catch (e) {
       return Container(
-        height: 200,  // Increased size
-        width: 200,   // Increased size
+        height: 200,
+        width: 200,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: Color(0xFFD4AF37).withOpacity(0.2),
@@ -151,7 +151,7 @@ class HomeScreen extends StatelessWidget {
     }
   }
 
-    Widget _buildFeatureList() {
+  Widget _buildFeatureList() {
     return Column(
       children: [
         FeatureRow(icon: Icons.personal_video, text: "Personalized recommendations"),
@@ -259,15 +259,13 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-
-
 }
 
 class FeatureRow extends StatelessWidget {
   final IconData icon;
   final String text;
 
-  const FeatureRow({required this.icon, required this.text});
+  const FeatureRow({Key? key, required this.icon, required this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

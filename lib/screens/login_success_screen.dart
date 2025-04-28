@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:recommendation_app/screens/media_selection_screen.dart';
 import 'package:recommendation_app/screens/mood_selection_screen.dart';
 
 class LoginSuccessScreen extends StatelessWidget {
-  final String userEmail; // Add this line
+  final String userEmail;
 
-  const LoginSuccessScreen({super.key, required this.userEmail}); // Update this line
+  const LoginSuccessScreen({super.key, required this.userEmail});
 
   @override
   Widget build(BuildContext context) {
@@ -86,30 +87,32 @@ class LoginSuccessScreen extends StatelessWidget {
                       'You have successfully logged in to your account',
                       style: TextStyle(
                         fontSize: 16,
-                        color: Color(0xFF5C3F3F)),
+                        color: Color(0xFF5C3F3F),
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 40),
                     ElevatedButton(
-                      onPressed: () {
+                    onPressed: () {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => MoodSelectionScreen(userEmail: userEmail),
+                          builder: (context) => MediaSelectionScreen(
+                            mood: '', // Empty mood since user hasn't selected yet
                           ),
-                        );
-                      },
+                         ),
+                         );
+                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF781D19),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 50, vertical: 16),
+                        padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 16),
                         elevation: 5,
                       ),
                       child: const Text(
-                        "Continue",
+                        'Continue',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 18,

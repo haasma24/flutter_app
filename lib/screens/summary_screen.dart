@@ -6,7 +6,7 @@ import 'package:recommendation_app/screens/success_screen.dart';
 class SummaryScreen extends StatelessWidget {
   final RegistrationContext contextData;
 
-  const SummaryScreen({Key? key, required this.contextData}) : super(key: key);
+  const SummaryScreen({super.key, required this.contextData});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,6 @@ class SummaryScreen extends StatelessWidget {
               left: -60,
               child: _buildCircle(100),
             ),
-            
             // Contenu principal
             SingleChildScrollView(
               child: Container(
@@ -76,7 +75,6 @@ class SummaryScreen extends StatelessWidget {
                         color: Color(0xFF5C3F3F)),
                     ),
                     const SizedBox(height: 40),
-                    
                     // Carte de résumé
                     Card(
                       elevation: 4,
@@ -89,7 +87,7 @@ class SummaryScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             _buildSummaryRow("First Name", contextData.firstName),
-                            const Divider(color: Color(0xFFD4AF37)), 
+                            const Divider(color: Color(0xFFD4AF37)),
                             const SizedBox(height: 15),
                             _buildSummaryRow("Last Name", contextData.lastName),
                             const Divider(color: Color(0xFFD4AF37)),
@@ -103,7 +101,6 @@ class SummaryScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 50),
-                    
                     // Bouton de confirmation
                     Center(
                       child: ElevatedButton(
@@ -149,8 +146,8 @@ class SummaryScreen extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Color(0xFF330000)),
-            ),
           ),
+        ),
         Expanded(
           flex: 5,
           child: Text(
@@ -184,7 +181,9 @@ class SummaryScreen extends StatelessWidget {
     });
 
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const SuccessScreen()),
+      MaterialPageRoute(
+        builder: (context) => const SuccessScreen(successType: SuccessType.registration),
+      ),
     );
   }
 }
