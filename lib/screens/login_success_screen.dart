@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recommendation_app/screens/WelcomeScreen.dart';
 
 class LoginSuccessScreen extends StatelessWidget {
   const LoginSuccessScreen({super.key});
@@ -88,8 +89,14 @@ class LoginSuccessScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 40),
                     ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
+                     onPressed: () {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>  WelcomeScreen(),
+                          ),
+                          (route) => route.isFirst, // Conserve seulement l'écran initial si nécessaire
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF781D19),

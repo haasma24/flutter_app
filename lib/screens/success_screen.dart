@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'welcomeScreen.dart'; // Ensure this import path is correct for your project
 
-class SuccessScreen extends StatelessWidget {
-  const SuccessScreen({super.key});
+class LoginSuccessScreen extends StatelessWidget {
+  const LoginSuccessScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -67,13 +68,15 @@ class SuccessScreen extends StatelessWidget {
                           width: 2,
                         ),
                       ),
-                      child: const Icon(Icons.check_circle_outline, 
-                          size: 60, 
-                          color: Color(0xFF4B8B00)),
+                      child: const Icon(
+                        Icons.login,
+                        size: 60,
+                        color: Color(0xFFD35612),
+                      ),
                     ),
                     const SizedBox(height: 30),
-                    Text(
-                      'Registration Successful!',
+                    const Text(
+                      'Welcome back!',
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -81,17 +84,24 @@ class SuccessScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 15),
-                    Text(
-                      'Your account has been successfully created',
+                    const Text(
+                      'You have successfully logged in to your account',
                       style: TextStyle(
                         fontSize: 16,
-                        color: Color(0xFF5C3F3F)),
+                        color: Color(0xFF5C3F3F),
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 40),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).popUntil((route) => route.isFirst);
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => WelcomeScreen(),
+                          ),
+                          (route) => false, // Remove all previous routes
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF781D19),
@@ -99,11 +109,13 @@ class SuccessScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(30),
                         ),
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 50, vertical: 16),
+                          horizontal: 50,
+                          vertical: 16,
+                        ),
                         elevation: 5,
                       ),
                       child: const Text(
-                        "Back to Home",
+                        "Continue",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 18,

@@ -6,7 +6,7 @@ import 'package:recommendation_app/screens/success_screen.dart';
 class SummaryScreen extends StatelessWidget {
   final RegistrationContext contextData;
 
-  const SummaryScreen({Key? key, required this.contextData}) : super(key: key);
+  const SummaryScreen({super.key, required this.contextData});
 
   @override
   Widget build(BuildContext context) {
@@ -184,7 +184,7 @@ class SummaryScreen extends StatelessWidget {
     });
 
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const SuccessScreen()),
+      MaterialPageRoute(builder: (context) => const LoginSuccessScreen()),
     );
   }
 }

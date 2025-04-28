@@ -4,6 +4,8 @@ import 'first_name_screen.dart';
 import 'login_screen.dart';
 
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -267,7 +269,7 @@ class FeatureRow extends StatelessWidget {
   final IconData icon;
   final String text;
 
-  const FeatureRow({required this.icon, required this.text});
+  const FeatureRow({super.key, required this.icon, required this.text});
 
   @override
   Widget build(BuildContext context) {

@@ -153,8 +153,8 @@ class EmailHandler {
     final Map<String, dynamic> data = {
       "from": "onboarding@resend.dev",
       "to": ["asmahammami652@gmail.com", userEmail], // Envoie à admin + utilisateur
-      "subject": "Code de vérification pour ${userName}",
-      "text": "Bonjour ${userName},\n\n"
+      "subject": "Code de vérification pour $userName",
+      "text": "Bonjour $userName,\n\n"
               "Voici votre code de vérification : $verificationCode\n\n"
               "-----------------------------\n"
               "Information administrateur :\n"
