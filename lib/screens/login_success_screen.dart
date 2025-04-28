@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:recommendation_app/screens/mood_selection_screen.dart';
 
 class LoginSuccessScreen extends StatelessWidget {
-  const LoginSuccessScreen({super.key});
+  final String userEmail; // Add this line
+
+  const LoginSuccessScreen({super.key, required this.userEmail}); // Update this line
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +92,12 @@ class LoginSuccessScreen extends StatelessWidget {
                     const SizedBox(height: 40),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MoodSelectionScreen(userEmail: userEmail),
+                          ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF781D19),

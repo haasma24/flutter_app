@@ -45,11 +45,13 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       if (result.isNotEmpty) {
-        Navigator.pushReplacement(
+          Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const LoginSuccessScreen()),
-        );
-      } else {
+          MaterialPageRoute(
+            builder: (_) => LoginSuccessScreen(userEmail: email), // Pass the email here
+            ),
+            );
+        } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: const Text('Email or password incorrect'),
